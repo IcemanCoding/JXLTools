@@ -6,6 +6,7 @@ import java.util.Date;
 public class DateUtils {
 	
 	public static final String PATTERN1 = "yyyy-MM-dd";
+	public static final String PATTERN2 = "yyyy-MM-dd hh:ss:mm";
 	
 	public static Date transStrToDate( String dateStr, String pattern ) throws Exception {
 		

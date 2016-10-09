@@ -12,6 +12,14 @@ import com.juxinli.tools.web.vo.BillingUserVO;
 
 public class OracleUtils {
 	
+	static {
+		try {
+			Class.forName( "oracle.jdbc.driver.OracleDriver" );
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main( String[] args ) {
 		
 		testOracle();
@@ -31,10 +39,14 @@ public class OracleUtils {
 		BillingUserEntity billingUserEntity = null;
 		
 		try {
-			conn = getConnection();
+//			conn = getConnection();
+//			Class.forName( "oracle.jdbc.driver.OracleDriver" );
+			System.out.println( "开始尝试连接数据库！" );
+			conn = DriverManager.getConnection( URL, USERNAME, PASSWORD );
 			StringBuffer sql = new StringBuffer();
 			sql.append( " select ORG_ACC, NM, IC from T_BILL_ALL " );
 			sql.append( " where ORG_ACC = ? and rptver = ? and ct >= ? and ct <= ? " );
+			sql.append( " group by ORG_ACC, NM, IC " );
 			ps = conn.prepareStatement( sql.toString() );
 			ps.setString( 1, billingUserVo.getOrg() );
 			ps.setString( 2, billingUserVo.getRpt_version() );
@@ -76,6 +88,7 @@ public class OracleUtils {
 	}
 	
 	private static Connection getConnection() throws Exception {
+		Class.forName( "oracle.jdbc.driver.OracleDriver" );
 		return DriverManager.getConnection( URL, USERNAME, PASSWORD );
 	}
 

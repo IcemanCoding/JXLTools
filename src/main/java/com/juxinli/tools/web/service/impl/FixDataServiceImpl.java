@@ -1,5 +1,6 @@
 package com.juxinli.tools.web.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,8 +18,8 @@ import com.juxinli.tools.web.vo.BillingUserVO;
 @Service
 public class FixDataServiceImpl implements FixDataService {
 
-	private static final String HTTP_URL = "";
-	private static final String BILLING_USER_METHOD = "";
+	private static final String HTTP_URL = "http://172.16.1.15:81/service";
+	private static final String BILLING_USER_METHOD = "/billing/user";
 	
 	@Override
 	public BillingUserBO compareBillingUserData( BillingUserVO billingUserVo ) throws Exception {
@@ -44,14 +45,20 @@ public class FixDataServiceImpl implements FixDataService {
 		}
 		
 		// return compare data
-		List<BillingUserEntity> dbDataTemp = dbData;
-		List<BillingUserEntity> apiDataTemp = apiData;
+		List<BillingUserEntity> dbDataTemp = new ArrayList<BillingUserEntity>( dbData.size() );
+		dbDataTemp.addAll( dbData );
+		List<BillingUserEntity> apiDataTemp = new ArrayList<BillingUserEntity>( apiData.size() );
+		apiDataTemp.addAll( apiData );
 		apiDataTemp.removeAll( dbData );
 		dbDataTemp.removeAll( apiData );
 		BillingUserBO billingUserBo = new BillingUserBO();
 		billingUserBo.setLackData( dbDataTemp );
 		billingUserBo.setSurplusData( apiDataTemp );
-		billingUserBo.setUpdateTime( DateUtils.transDateToString( new Date(), DateUtils.PATTERN1 ) );
+		billingUserBo.setUpdateTime( DateUtils.transDateToString( new Date(), DateUtils.PATTERN2 ) );
+		billingUserBo.setApiDataCnt( apiData.size() );
+		billingUserBo.setDbDataCnt( dbData.size() );
+		billingUserBo.setLackCnt( dbDataTemp.size() );
+		billingUserBo.setSurplusCnt( apiDataTemp.size() );
 		
 		return billingUserBo;
 		
