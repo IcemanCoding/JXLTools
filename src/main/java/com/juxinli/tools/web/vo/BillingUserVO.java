@@ -28,12 +28,14 @@ public class BillingUserVO {
 	}
 	public String getSt() {
 		return st;
+//		return st + " 00:00:00";
 	}
 	public void setSt(String st) {
 		this.st = st;
 	}
 	public String getEt() {
 		return et;
+//		return et + " 23:59:59";
 	}
 	public void setEt(String et) {
 		this.et = et;

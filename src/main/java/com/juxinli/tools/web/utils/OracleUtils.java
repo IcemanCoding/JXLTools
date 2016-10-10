@@ -39,25 +39,26 @@ public class OracleUtils {
 		BillingUserEntity billingUserEntity = null;
 		
 		try {
-//			conn = getConnection();
-//			Class.forName( "oracle.jdbc.driver.OracleDriver" );
 			System.out.println( "开始尝试连接数据库！" );
 			conn = DriverManager.getConnection( URL, USERNAME, PASSWORD );
 			StringBuffer sql = new StringBuffer();
 			sql.append( " select ORG_ACC, NM, IC from T_BILL_ALL " );
-			sql.append( " where ORG_ACC = ? and rptver = ? and ct >= ? and ct <= ? " );
+			sql.append( " where ORG_ACC = '" + billingUserVo.getOrg() + "' " );
+			sql.append( " and rptver = '" + billingUserVo.getRpt_version() + "' " );
+			sql.append( " and lsr like '" + billingUserVo.getSt().replaceAll( "-", "" ) + "%' " );
 			sql.append( " group by ORG_ACC, NM, IC " );
+			System.out.println( sql.toString() );
 			ps = conn.prepareStatement( sql.toString() );
-			ps.setString( 1, billingUserVo.getOrg() );
-			ps.setString( 2, billingUserVo.getRpt_version() );
-			ps.setDate( 3, 
-					new java.sql.Date( 
-							DateUtils.transStrToDate( 
-									billingUserVo.getSt(), DateUtils.PATTERN1 ).getTime() ) );
-			ps.setDate( 4, 
-					new java.sql.Date(
-							DateUtils.transStrToDate(
-									billingUserVo.getEt(), DateUtils.PATTERN1 ).getTime() ) );
+//			ps.setString( 1, billingUserVo.getOrg() );
+//			ps.setString( 2, billingUserVo.getRpt_version() );
+//			ps.setLong( 3, 
+//					new java.sql.Date( 
+//							DateUtils.transStrToDate( 
+//									billingUserVo.getSt(), DateUtils.PATTERN2 ).getTime() ) ;
+//			ps.setLong( 4, 
+//					new java.sql.Date(
+//							DateUtils.transStrToDate(
+//									billingUserVo.getEt(), DateUtils.PATTERN2 ).getTime() ) ;
 			result = ps.executeQuery();
 			while ( result.next() ) {
 				billingUserEntity = new BillingUserEntity();
